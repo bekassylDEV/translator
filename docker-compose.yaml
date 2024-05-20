@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: translator-app
+    command: ./start.sh
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    volumes:
+      - ./src:/opt/app/src
+    networks:
+      - translation-services
+
+  db:
+    image: mongo:4.4
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - translation-services
+    env_file:
+      - .env
+
+networks:
+  translation-services:
+
+volumes:
+  mongo_data:
